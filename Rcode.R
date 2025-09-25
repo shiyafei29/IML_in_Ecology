@@ -1,10 +1,10 @@
 
-#¶ÁÈëÊı¾İ
+#è¯»å…¥æ•°æ®
 data <- read.csv("New_Alpine_Meadow_Plant_Diversity_Data.csv")
 View(data)
 
-#####################Ì½Ë÷ĞÔÊı¾İ·ÖÎö-20250504##############################
-# ¼ÆËãÃèÊöĞÔÍ³¼Æ½á¹û
+#####################æ¢ç´¢æ€§æ•°æ®åˆ†æ-20250504##############################
+# è®¡ç®—æè¿°æ€§ç»Ÿè®¡ç»“æœ
 summary_stats <- data.frame(
   Mean = sapply(data, mean, na.rm = TRUE),
   Median = sapply(data, median, na.rm = TRUE),
@@ -16,19 +16,19 @@ summary_stats <- data.frame(
 print(round(summary_stats, 2))
 
 
-# ¼ÓÔØ±ØÒª°ü
+# åŠ è½½å¿…è¦åŒ…
 library(corrplot)
 library(ggplot2)
 
-# ¶ÁÈ¡Êı¾İ£¨Çë¸ù¾İÊµ¼ÊÂ·¾¶ĞŞ¸Ä£©
+# è¯»å–æ•°æ®ï¼ˆè¯·æ ¹æ®å®é™…è·¯å¾„ä¿®æ”¹ï¼‰
 data <- read.csv("New_Alpine_Meadow_Plant_Diversity_Data.csv")
-# ¼ÆËãÆ¤¶ûÉ­Ïà¹ØĞÔ¾ØÕó
+# è®¡ç®—çš®å°”æ£®ç›¸å…³æ€§çŸ©é˜µ
 cor_matrix <- cor(data, use = "complete.obs", method = "pearson")
-# ´òÓ¡Ïà¹ØĞÔ¾ØÕó£¨±£ÁôÁ½Î»Ğ¡Êı£©
+# æ‰“å°ç›¸å…³æ€§çŸ©é˜µï¼ˆä¿ç•™ä¸¤ä½å°æ•°ï¼‰
 print(round(cor_matrix, 2))
-# ×Ô¶¨ÒåË«É«µ÷É«°å
+# è‡ªå®šä¹‰åŒè‰²è°ƒè‰²æ¿
 flat_colors <- colorRampPalette(c("#e74c3c", "white", "#3498db"))(200)
-# »æÍ¼
+# ç»˜å›¾
 corrplot(cor_matrix,
          method = "color",
          type = "full",
@@ -37,32 +37,32 @@ corrplot(cor_matrix,
          tl.col = "black",
          tl.cex = 1.0,
          tl.srt = 45,
-         tl.font = 3,              # Ğ±Ìå±êÇ©
+         tl.font = 3,              # æ–œä½“æ ‡ç­¾
          number.cex = 0.9,
          mar = c(0, 0, 2, 0))
-###############ÏßĞÔ»Ø¹éÄ£ĞÍ-20250504############################
-# °²×°ºÍ¼ÓÔØ±ØÒª°ü
+###############çº¿æ€§å›å½’æ¨¡å‹-20250504############################
+# å®‰è£…å’ŒåŠ è½½å¿…è¦åŒ…
 library(lm.beta)
 library(ggplot2)
 library(patchwork)
 
-# ÄâºÏÏßĞÔ»Ø¹éÄ£ĞÍ
+# æ‹Ÿåˆçº¿æ€§å›å½’æ¨¡å‹
 model <- lm(PlantDiversity ~ Elevation + Temperature + SoilMoisture +
               SoilBulk + SoilOrganicMatter, data = data)
 
-# Ô­Ê¼»Ø¹éÏµÊıÌáÈ¡
+# åŸå§‹å›å½’ç³»æ•°æå–
 coef_df1 <- as.data.frame(summary(model)$coefficients)
-coef_df1 <- coef_df1[-1, ]  # È¥µô½Ø¾à
+coef_df1 <- coef_df1[-1, ]  # å»æ‰æˆªè·
 coef_df1$Variable <- rownames(coef_df1)
 rownames(coef_df1) <- NULL
 names(coef_df1) <- c("Estimate", "Std.Error", "t.value", "P.Value", "Variable")
 
-# Ìí¼ÓÏÔÖøĞÔ±ê¼Ç
+# æ·»åŠ æ˜¾è‘—æ€§æ ‡è®°
 coef_df1$Sig <- cut(coef_df1$P.Value,
                     breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
                     labels = c("***", "**", "*", ""))
 
-# Ô­Ê¼»Ø¹éÏµÊı´¦Àí
+# åŸå§‹å›å½’ç³»æ•°å¤„ç†
 coef_df1 <- as.data.frame(summary(model)$coefficients)[-1, ]
 coef_df1$Variable <- rownames(summary(model)$coefficients)[-1]
 names(coef_df1) <- c("Estimate", "Std.Error", "t.value", "P.Value", "Variable")
@@ -71,7 +71,7 @@ coef_df1$Sig <- cut(coef_df1$P.Value,
                     labels = c("***", "**", "*", ""))
 coef_df1$Signif <- coef_df1$P.Value < 0.05
 
-# Í¼1£ºÔ­Ê¼ÏµÊıÍ¼£¨ÎŞÍ¼Àı£©
+# å›¾1ï¼šåŸå§‹ç³»æ•°å›¾ï¼ˆæ— å›¾ä¾‹ï¼‰
 ggplot(coef_df1, aes(y = reorder(Variable, Estimate), x = Estimate)) +
   geom_point(aes(color = Signif), size = 4) +
   geom_errorbarh(aes(xmin = Estimate - 1.96 * Std.Error, xmax = Estimate + 1.96 * Std.Error), height = 0.2) +
@@ -82,7 +82,7 @@ ggplot(coef_df1, aes(y = reorder(Variable, Estimate), x = Estimate)) +
   theme_minimal(base_size = 13) +
   theme(panel.border = element_rect(fill = NA, color = "black"))
 
-# ±ê×¼»¯»Ø¹éÏµÊı´¦Àí
+# æ ‡å‡†åŒ–å›å½’ç³»æ•°å¤„ç†
 model_beta <- lm.beta(model)
 coef_df2 <- as.data.frame(summary(model_beta)$coefficients)[-1, ]
 coef_df2$Variable <- rownames(summary(model_beta)$coefficients)[-1]
@@ -94,7 +94,7 @@ coef_df2$Sig <- cut(coef_df2$`Pr(>|t|)`,
                     labels = c("***", "**", "*", ""))
 coef_df2$Signif <- coef_df2$`Pr(>|t|)` < 0.05
 
-# Í¼2£º±ê×¼»¯ÏµÊıÍ¼£¨ÎŞÍ¼Àı£©
+# å›¾2ï¼šæ ‡å‡†åŒ–ç³»æ•°å›¾ï¼ˆæ— å›¾ä¾‹ï¼‰
 ggplot(coef_df2, aes(y = reorder(Variable, Beta), x = Beta)) +
   geom_point(aes(color = Signif), size = 4) +
   geom_errorbarh(aes(xmin = Lower, xmax = Upper), height = 0.2) +
@@ -107,30 +107,30 @@ ggplot(coef_df2, aes(y = reorder(Variable, Beta), x = Beta)) +
 
 
 
-###########²ã´Î·Ö¸ô
+###########å±‚æ¬¡åˆ†éš”ä¸å˜å·®åˆ†è§£####################################
 library(rdacca.hp)
-# ÉèÖÃÏìÓ¦±äÁ¿ºÍ½âÊÍ±äÁ¿
+# è®¾ç½®å“åº”å˜é‡å’Œè§£é‡Šå˜é‡
 Y <- data[, "PlantDiversity"]
 X <- data[, c("Elevation", "Temperature", "SoilMoisture", "SoilBulk", "SoilOrganicMatter")]
 
-# ÕıÈ·µ÷ÓÃ£¨²»ÒªĞ´ resp=, pred=, data=£©
+# æ­£ç¡®è°ƒç”¨ï¼ˆä¸è¦å†™ resp=, pred=, data=ï¼‰
 result <- rdacca.hp(Y, X, type = "adjR2", method = "RDA")
 
-# ²é¿´½á¹û
+# æŸ¥çœ‹ç»“æœ
 print(result)
 
 plot(result, plot.perc = TRUE)
 
-# ÌáÈ¡±äÁ¿Ãû³ÆºÍ¶ÀÁ¢¹±Ï×£¨°Ù·Ö±È£©
+# æå–å˜é‡åç§°å’Œç‹¬ç«‹è´¡çŒ®ï¼ˆç™¾åˆ†æ¯”ï¼‰
 plot_data <- data.frame(
   Variable = rownames(result$Hier.part),
-  Contribution = result$Hier.part[, 1] * 100  # ³Ë100µÃµ½°Ù·Ö±È
+  Contribution = result$Hier.part[, 1] * 100  # ä¹˜100å¾—åˆ°ç™¾åˆ†æ¯”
 )
 
-# ¼ÓÔØ ggplot2
+# åŠ è½½ ggplot2
 library(ggplot2)
 
-# ¼ÆËãÒ»¸öºÏÀíµÄ¶¥²¿±ß½ç
+# è®¡ç®—ä¸€ä¸ªåˆç†çš„é¡¶éƒ¨è¾¹ç•Œ
 ymax <- max(plot_data$Contribution) * 1.1
 ggplot(plot_data, aes(y = reorder(Variable, Contribution), x = Contribution)) +
   geom_col(fill = "#2a9d8f", width = 0.6) +
@@ -157,71 +157,12 @@ ggplot(plot_data, aes(y = reorder(Variable, Contribution), x = Contribution)) +
 
 
 
-###############ÌØÕ÷½»»¥-20250505
-
-
-
-##############¹ãÒå¿É¼ÓÄ£ĞÍGAM##################
-
-# ¼ÓÔØ±ØÒªµÄ¿â
-library(mgcv)
-
-# ¶ÁÈ¡Êı¾İ
-data <- read.csv("Alpine_Meadow_Plant_Diversity_Data.csv")
-
-# ÄâºÏ¹ãÒå¿É¼ÓÄ£ĞÍ£¨GAM£©
-# Ê¹ÓÃÆ½»¬º¯Êı 's()' ×÷ÓÃÓÚÃ¿¸ö×Ô±äÁ¿
-gam_model <- gam(PlantDiversity ~ s(Elevation, k = 10) + s(Temperature, k = 10) +
-                   s(SoilMoisture, k = 10) + s(SoilBulk, k = 10) + 
-                   s(SoilOrganicMatter, k = 10), data = data)
-
-# ²é¿´Ä£ĞÍÕªÒª
-summary(gam_model)
-
-# »æÖÆÄ£ĞÍ£¬²é¿´Æ½»¬º¯ÊıµÄĞ§¹û
-plot(gam_model, pages = 1)
-
-
-
-
-###########rdacca.hp°ü±ä²î·Ö½â######################
-
-# ¼ÓÔØrdacca.hp°ü
-library(rdacca.hp)
-
-# ¶¨ÒåÏìÓ¦±äÁ¿ºÍÔ¤²â±äÁ¿¾ØÕó
-response_var <- data$PlantDiversity
-predictor_vars <- data[, c("Temperature", "Elevation", "SoilMoisture", "SoilBulk", "SoilOrganicMatter")]
-
-# ¼ÓÔØÊı¾İ²¢½«Ã¿¸ö±äÁ¿°ü×°ÎªÊı¾İ¿ò
-groups <- list(
-  Temperature = data.frame(data$Temperature),
-  Elevation = data.frame(data$Elevation),
-  SoilMoisture = data.frame(data$SoilMoisture),
-  SoilBulk = data.frame(data$SoilBulk),
-  SoilOrganicMatter = data.frame(data$SoilOrganicMatter)
-)
-
-# ½«ÏìÓ¦±äÁ¿°ü×°ÎªÊı¾İ¿ò
-response_var <- data.frame(data$PlantDiversity)
-
-# Ö´ĞĞ·½²î·Ö½â·ÖÎö
-var_decomp_results <- rdacca.hp(response_var, groups)
-
-# ²é¿´½á¹û
-print(var_decomp_results)
-
-# ¿ÉÊÓ»¯·½²î¹±Ï×
-plot(var_decomp_results)
-
-
-
-#############»Ø¹éÊ÷-20250504####################
+#############å›å½’æ ‘-20250504####################
 
 library(rpart)
 library(rpart.plot)
 data <- read.csv("New_Alpine_Meadow_Plant_Diversity_Data.csv")
-# ÏŞÖÆ×î´óÉî¶ÈÎª 5 ²ã£¬ÔÊĞí½Ï¸´ÔÓ½á¹¹µ«±ÜÃâ¹ıÄâºÏ
+# é™åˆ¶æœ€å¤§æ·±åº¦ä¸º 5 å±‚ï¼Œå…è®¸è¾ƒå¤æ‚ç»“æ„ä½†é¿å…è¿‡æ‹Ÿåˆ
 tree_model <- rpart(
   PlantDiversity ~ Elevation + Temperature + SoilMoisture + SoilBulk + SoilOrganicMatter,
   data = data,
@@ -229,7 +170,7 @@ tree_model <- rpart(
   control = rpart.control(maxdepth = 3, cp = 0.001, minsplit = 5)
 )
 View(data)
-# ¿ÉÊÓ»¯
+# å¯è§†åŒ–
 rpart.plot(tree_model, type = 2, extra = 101,
            fallen.leaves = TRUE,
            main = "Regression Tree for Plant Diversity (Max Depth = 3)")
@@ -238,131 +179,90 @@ rpart.plot(tree_model, type = 2, extra = 101,
 
 
 
-#############Ëæ»úÉ­ÁÖÄ£ĞÍ-202050504###########
+#############éšæœºæ£®æ—æ¨¡å‹-202050504###########
 library(randomForest)
-# Ê¹ÓÃÒò±äÁ¿ PlantDiversity ºÍÆäËû×Ô±äÁ¿¹¹½¨Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
-set.seed(123) # ÉèÖÃÖÖ×ÓÒÔÈ·±£½á¹û¿ÉÖØ¸´
-#Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
+# ä½¿ç”¨å› å˜é‡ PlantDiversity å’Œå…¶ä»–è‡ªå˜é‡æ„å»ºéšæœºæ£®æ—å›å½’æ¨¡å‹
+set.seed(123) # è®¾ç½®ç§å­ä»¥ç¡®ä¿ç»“æœå¯é‡å¤
+#éšæœºæ£®æ—å›å½’æ¨¡å‹
 rf_model <- randomForest(PlantDiversity ~ ., data = data, 
                          ntree = 500, importance = TRUE)
 
-#############×Ô±äÁ¿ÖØÒªĞÔÅÅĞò####################
-# ¼ÓÔØ±ØÒªµÄ°ü
+
+
+
+#############è‡ªå˜é‡é‡è¦æ€§æ’åº####################
+# åŠ è½½å¿…è¦çš„åŒ…
 library(randomForest)
 
 data <- read.csv("New_Alpine_Meadow_Plant_Diversity_Data.csv")
-# ¹¹½¨Ò»¸öËæ»úÉ­ÁÖÄ£ĞÍ£¬Ô¤²â±äÁ¿Îª mpg£¬Ê¹ÓÃÆäËû±äÁ¿×÷Îª×Ô±äÁ¿
-set.seed(123)  # ÉèÖÃËæ»úÖÖ×ÓÒÔ±ã½á¹û¿É¸´ÏÖ
+# æ„å»ºä¸€ä¸ªéšæœºæ£®æ—æ¨¡å‹ï¼Œé¢„æµ‹å˜é‡ä¸º mpgï¼Œä½¿ç”¨å…¶ä»–å˜é‡ä½œä¸ºè‡ªå˜é‡
+set.seed(123)  # è®¾ç½®éšæœºç§å­ä»¥ä¾¿ç»“æœå¯å¤ç°
 rf_model <- randomForest(PlantDiversity ~ ., data = data, importance = TRUE)
 
-# ²é¿´ÌØÕ÷µÄÖØÒªĞÔ
+# æŸ¥çœ‹ç‰¹å¾çš„é‡è¦æ€§
 importance(rf_model)
 
-# ½«ÌØÕ÷ÖØÒªĞÔ½øĞĞÅÅĞò²¢¿ÉÊÓ»¯(»ùÓÚ»ùÄáÖØÒªĞÔ/Gini Importance)
-importance_ordered <- importance(rf_model)[order(importance(rf_model)[,1],
-                                                 decreasing = TRUE), ]
-print(importance_ordered)
-
-# »æÖÆÌØÕ÷ÖØÒªĞÔÍ¼
-varImpPlot(rf_model, main = "Variable Importance in Random Forest")
-
-# ²é¿´ÌØÕ÷ÖØÒªĞÔ(»ùÓÚÖÃ»»ÖØÒªĞÔ/Permutation Importance)
-importance(rf_model, type = 2)
-# ½«ÌØÕ÷ÖØÒªĞÔ½øĞĞÅÅĞò²¢¿ÉÊÓ»¯(ÖÃ»»ÖØÒªĞÔ/Permutation Importance)
-importance_ordered <- importance(rf_model)[order(importance(rf_model)[,1],
-                                                 decreasing = TRUE), ]# »æÖÆÌØÕ÷ÖØÒªĞÔÍ¼
-varImpPlot(rf_model, type = 2, main = "Variable Importance in Random Forest")
-?varImpPlot
-
-
-
-
-
-
-
-
-
-
-library(randomForest)
-
-# ¶ÁÈ¡Êı¾İ
-data <- read.csv("New_Alpine_Meadow_Plant_Diversity_Data.csv")
-
-# ¹¹½¨Ëæ»úÉ­ÁÖÄ£ĞÍ
-set.seed(123)
-rf_model <- randomForest(PlantDiversity ~ ., data = data, importance = TRUE)
-
 # ----------------------------
-# ÌØÕ÷ÖØÒªĞÔÅÅĞò²¢´òÓ¡
+# ç‰¹å¾é‡è¦æ€§æ’åºå¹¶æ‰“å°
 # ----------------------------
-# Permutation Importance£¨ÖÃ»»ÖØÒªĞÔ£©
+# Permutation Importanceï¼ˆç½®æ¢é‡è¦æ€§ï¼‰
 perm_importance <- importance(rf_model, type = 2)
 perm_ordered <- perm_importance[order(perm_importance[, 1], decreasing = TRUE), ]
 print("Permutation Importance:")
 print(perm_ordered)
 
-# Gini Importance£¨»ùÄá²»´¿¶È¼õÉÙ£©
+# Gini Importanceï¼ˆåŸºå°¼ä¸çº¯åº¦å‡å°‘ï¼‰
 gini_importance <- importance(rf_model, type = 1)
 gini_ordered <- gini_importance[order(gini_importance[, 1], decreasing = TRUE), ]
 print("Gini Importance:")
 print(gini_ordered)
 
-
-
 # ----------------------------
-# ×éÍ¼ÏÔÊ¾£¨1ĞĞ2ÁĞ£©
+# ç»„å›¾æ˜¾ç¤ºï¼ˆ1è¡Œ2åˆ—ï¼‰
 # ----------------------------
-
-par(mfrow = c(1, 2))  # ÉèÖÃ»­²¼Îª 1 ĞĞ 2 ÁĞ
-
-varImpPlot(rf_model, type = 1, main = "Permutation Importance")          # ×óÍ¼
-varImpPlot(rf_model, type = 2, main = "Gini Importance")   # ÓÒÍ¼
-
-par(mfrow = c(1, 1))  # »Ö¸´Îªµ¥Í¼Ä£Ê½
+par(mfrow = c(1, 2))  # è®¾ç½®ç”»å¸ƒä¸º 1 è¡Œ 2 åˆ—
+varImpPlot(rf_model, type = 1, main = "Permutation Importance")          # å·¦å›¾
+varImpPlot(rf_model, type = 2, main = "Gini Importance")   # å³å›¾
+par(mfrow = c(1, 1))  # æ¢å¤ä¸ºå•å›¾æ¨¡å¼
 
 
 
 
-
-
-
-############²¿·ÖÒÀÀµÍ¼PDF(»ùÓÚËæ»úÉ­ÁÖ-20250504)##############
-
-# ¼ÓÔØ°ü
+############éƒ¨åˆ†ä¾èµ–å›¾PDF(åŸºäºéšæœºæ£®æ—-20250504)##############
+# åŠ è½½åŒ…
 library(randomForest)
 library(pdp)
 
-# Ê¹ÓÃÒò±äÁ¿ PlantDiversity ºÍÆäËû×Ô±äÁ¿¹¹½¨Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
-set.seed(123) # ÉèÖÃÖÖ×ÓÒÔÈ·±£½á¹û¿ÉÖØ¸´
-#Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
+# ä½¿ç”¨å› å˜é‡ PlantDiversity å’Œå…¶ä»–è‡ªå˜é‡æ„å»ºéšæœºæ£®æ—å›å½’æ¨¡å‹
+set.seed(123) # è®¾ç½®ç§å­ä»¥ç¡®ä¿ç»“æœå¯é‡å¤
+#éšæœºæ£®æ—å›å½’æ¨¡å‹
 rf_model <- randomForest(PlantDiversity ~ ., data = data, 
                          ntree = 500, importance = TRUE)
 
-# ´òÓ¡Ä£ĞÍĞÅÏ¢
+# æ‰“å°æ¨¡å‹ä¿¡æ¯
 print(rf_model)
 
-# ²é¿´±äÁ¿ÖØÒªĞÔ
+# æŸ¥çœ‹å˜é‡é‡è¦æ€§
 importance(rf_model)
 varImpPlot(rf_model)
 
-# Ê¹ÓÃpdp»æÖÆ²¿·ÖÒÀÀµÍ¼
-# ÒÔElevationÎªÀı£¬¿ÉÒÔ¸ü¸ÄÎªÆäËû×Ô±äÁ¿£¬ÈçTemperature
+# ä½¿ç”¨pdpç»˜åˆ¶éƒ¨åˆ†ä¾èµ–å›¾
+# ä»¥Elevationä¸ºä¾‹ï¼Œå¯ä»¥æ›´æ”¹ä¸ºå…¶ä»–è‡ªå˜é‡ï¼Œå¦‚Temperature
 partial_dependence <- partial(rf_model, pred.var = "Elevation", 
                               grid.resolution = 50)
-# »æÖÆ²¿·ÖÒÀÀµÍ¼
+# ç»˜åˆ¶éƒ¨åˆ†ä¾èµ–å›¾
 plotPartial(partial_dependence)
-# Ò²¿ÉÒÔÎªÆäËû±äÁ¿»æÖÆ²¿·ÖÒÀÀµÍ¼£¬ÀıÈçTemperature
+# ä¹Ÿå¯ä»¥ä¸ºå…¶ä»–å˜é‡ç»˜åˆ¶éƒ¨åˆ†ä¾èµ–å›¾ï¼Œä¾‹å¦‚Temperature
 partial_dependence_temp <- partial(rf_model, pred.var = "Temperature", grid.resolution = 50)
 plotPartial(partial_dependence_temp)
 
 
-
-# Òª»æÍ¼µÄ±äÁ¿
+# è¦ç»˜å›¾çš„å˜é‡
 vars <- c("Elevation", "Temperature", "SoilMoisture", "SoilBulk", "SoilOrganicMatter")
-# ÓÃÓÚ´æ·ÅÃ¿¸öÍ¼µÄÁĞ±í
+# ç”¨äºå­˜æ”¾æ¯ä¸ªå›¾çš„åˆ—è¡¨
 pdp_plot_list <- list()
 
-# Ê¹ÓÃ for Ñ­»·£¬Öğ¸ö»æÍ¼
+# ä½¿ç”¨ for å¾ªç¯ï¼Œé€ä¸ªç»˜å›¾
 for (var in vars) {
   pd <- partial(rf_model, pred.var = var, grid.resolution = 50)
   
@@ -384,10 +284,10 @@ for (var in vars) {
   pdp_plot_list[[var]] <- p
 }
 
-# ²¹Ò»¸ö¿Õ°×Í¼ÈÃÍ¼ĞÎ¶ÔÆë 2x3
+# è¡¥ä¸€ä¸ªç©ºç™½å›¾è®©å›¾å½¢å¯¹é½ 2x3
 pdp_plot_list[["blank"]] <- plot_spacer()
 
-# Æ´Í¼Õ¹Ê¾
+# æ‹¼å›¾å±•ç¤º
 final_plot <- wrap_plots(pdp_plot_list, ncol = 3) +
   plot_annotation(
     title = "Partial Dependence Plots for Key Environmental Variables",
@@ -396,33 +296,34 @@ final_plot <- wrap_plots(pdp_plot_list, ncol = 3) +
     )
   )
 
-# Õ¹Ê¾
+# å±•ç¤º
 print(final_plot)
 
 
-############¾Ö²¿ÀÛ¼ÆĞ§Ó¦ALE(»ùÓÚËæ»úÉ­ÁÖ-20250504)##############
 
-# ¼ÓÔØ°ü
+############å±€éƒ¨ç´¯è®¡æ•ˆåº”ALE(åŸºäºéšæœºæ£®æ—-20250504)##############
+
+# åŠ è½½åŒ…
 library(iml)
 library(randomForest)
 
-# Ê¹ÓÃËæ»úÉ­ÁÖ¹¹½¨»Ø¹éÄ£ĞÍ
+# ä½¿ç”¨éšæœºæ£®æ—æ„å»ºå›å½’æ¨¡å‹
 set.seed(123)
 rf_model <- randomForest(PlantDiversity ~ ., data = data, ntree = 500)
 
 
-# 3. ´´½¨ Predictor ¶ÔÏó
+# 3. åˆ›å»º Predictor å¯¹è±¡
 X <- data[, c("Elevation", "Temperature", "SoilMoisture", "SoilBulk", "SoilOrganicMatter")]
 predictor_rf <- Predictor$new(rf_model, data = X, y = data$PlantDiversity)
 
-# 4. Ñ­»·Éú³ÉÃ¿¸ö±äÁ¿µÄ ALE Í¼
+# 4. å¾ªç¯ç”Ÿæˆæ¯ä¸ªå˜é‡çš„ ALE å›¾
 vars <- colnames(X)
 ale_plot_list <- list()
 
 for (v in vars) {
   ale_obj <- FeatureEffect$new(predictor_rf, feature = v, method = "ale")
   
-# »ù´¡Í¼
+# åŸºç¡€å›¾
 p <- ale_obj$plot() +
     ggtitle(paste("ALE:", v)) +
     theme_minimal(base_size = 11) +
@@ -433,19 +334,19 @@ p <- ale_obj$plot() +
       panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5)
     )
   
-  #éÙÉ«¡¢¼Ó´ÖÏßÌõ
+  #æ©˜è‰²ã€åŠ ç²—çº¿æ¡
   if (!is.null(p$layers[[1]]$aes_params)) {
-    p$layers[[1]]$aes_params$colour <- "#e67e22"  # éÙÉ«
-    p$layers[[1]]$aes_params$size <- 1          # ¼Ó´Ö
+    p$layers[[1]]$aes_params$colour <- "#e67e22"  # æ©˜è‰²
+    p$layers[[1]]$aes_params$size <- 1          # åŠ ç²—
   }
   
   ale_plot_list[[v]] <- p
 }
 
-# 5. Ìí¼Ó¿Õ°×Í¼£¬±£Ö¤Æ´Í¼¶ÔÆë£¨2x3£©
+# 5. æ·»åŠ ç©ºç™½å›¾ï¼Œä¿è¯æ‹¼å›¾å¯¹é½ï¼ˆ2x3ï¼‰
 ale_plot_list[["blank"]] <- patchwork::plot_spacer()
 
-# 6. Æ´Í¼Õ¹Ê¾
+# 6. æ‹¼å›¾å±•ç¤º
 final_ale_plot <- wrap_plots(ale_plot_list, ncol = 3) +
   plot_annotation(
     title = "Accumulated Local Effects (ALE) for Environmental Variables",
@@ -454,28 +355,28 @@ final_ale_plot <- wrap_plots(ale_plot_list, ncol = 3) +
     )
   )
 
-# 7. ÏÔÊ¾Í¼Ïñ
+# 7. æ˜¾ç¤ºå›¾åƒ
 print(final_ale_plot)
 
 
 
 
 
-############ÌØÕ÷½»»¥-20250505############
-set.seed(123) # ÉèÖÃÖÖ×ÓÒÔÈ·±£½á¹û¿ÉÖØ¸´
-#Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
+############ç‰¹å¾äº¤äº’-20250505############
+set.seed(123) # è®¾ç½®ç§å­ä»¥ç¡®ä¿ç»“æœå¯é‡å¤
+#éšæœºæ£®æ—å›å½’æ¨¡å‹
 rf_model <- randomForest(PlantDiversity ~ ., data = data, 
                          ntree = 500, importance = TRUE)
 library(iml)
-#####(1) ±äÁ¿¼äµÄ×ÜÌå½»»¥
-# ¹¹½¨ predictor£¨ÄãÓ¦ÒÑÓĞ£©
+#####(1) å˜é‡é—´çš„æ€»ä½“äº¤äº’
+# æ„å»º predictorï¼ˆä½ åº”å·²æœ‰ï¼‰
 X <- data[, c("Elevation", "Temperature", "SoilMoisture", "SoilBulk", "SoilOrganicMatter")]
 predictor_rf <- Predictor$new(rf_model, data = X, y = data$PlantDiversity)
-# ¼ÆËãÃ¿¸ö±äÁ¿ÓëÆäËû±äÁ¿µÄÆ½¾ù½»»¥Ç¿¶È
+# è®¡ç®—æ¯ä¸ªå˜é‡ä¸å…¶ä»–å˜é‡çš„å¹³å‡äº¤äº’å¼ºåº¦
 interaction_obj <- Interaction$new(predictor_rf)
-# ²é¿´½á¹û
+# æŸ¥çœ‹ç»“æœ
 print(interaction_obj$results)
-# »æÍ¼
+# ç»˜å›¾
 plot1 <- plot(interaction_obj) +
   ggtitle("Overall Interaction Strength") +
   theme_minimal(base_family = "Arial", base_size = 12) +
@@ -492,10 +393,10 @@ plot1 <- plot(interaction_obj) +
     expand = expansion(mult = c(0, 0.05))
   )
 
-######(2)Á½Á½±äÁ¿¼äµÄ½»»¥ÏìÓ¦£ºÒÔElevation ÓëÆäËû±äÁ¿µÄ½»»¥Ç¿¶ÈÎªÀı
+######(2)ä¸¤ä¸¤å˜é‡é—´çš„äº¤äº’å“åº”ï¼šä»¥Elevation ä¸å…¶ä»–å˜é‡çš„äº¤äº’å¼ºåº¦ä¸ºä¾‹
 interaction_elev <- Interaction$new(predictor_rf, feature = "Elevation")
 print(interaction_elev$results)
-# »æÍ¼£¨¿ÉÊÓ»¯ Elevation ÓëÆäËû±äÁ¿µÄ H-statistic£©
+# ç»˜å›¾ï¼ˆå¯è§†åŒ– Elevation ä¸å…¶ä»–å˜é‡çš„ H-statisticï¼‰
 plot2 <- plot(interaction_elev) +
   ggtitle("Interaction with Elevation") +
   theme_minimal(base_family = "Arial", base_size = 12) +
@@ -511,31 +412,31 @@ plot2 <- plot(interaction_elev) +
     limits = c(0, NA),
     expand = expansion(mult = c(0, 0.05))
   )
-#×éÍ¼
+#ç»„å›¾
 final_plot <- plot1 + plot2 +
   plot_layout(ncol = 2, widths = c(1, 1)) +
   plot_annotation(
     title = "Feature Interaction Summary",
     theme = theme(plot.title = element_text(family = "Arial", face = "bold", size = 16, hjust = 0.5))
   )
-#ÏÔÊ¾
+#æ˜¾ç¤º
 print(final_plot)
 
 
-######2D-PDPºÍ2D-ALE
-#¼ÓÔØ°ü
+######2D-PDPå’Œ2D-ALE###########
+#åŠ è½½åŒ…
 library(randomForest)
 library(pdp)
 library(iml)
 library(ggplot2)
 library(patchwork)
 library(yaImpute)
-#¼ÆËãElevationÓëTemperatureµÄPDP 
+#è®¡ç®—Elevationä¸Temperatureçš„PDP 
 pdp_2d <- partial(rf_model,
                   pred.var = c("Elevation", "Temperature"),
                   grid.resolution = 20,
                   progress = "none")
-#»æÖÆPDP
+#ç»˜åˆ¶PDP
 p1 <- ggplot(pdp_2d, aes(x = Elevation, y = Temperature, fill = yhat)) +
   geom_tile() +
   #geom_contour(aes(z = yhat), color = "white", alpha = 0.5) +
@@ -545,49 +446,51 @@ p1 <- ggplot(pdp_2d, aes(x = Elevation, y = Temperature, fill = yhat)) +
     name = "Predicted\nDiversity"
   ) +
   labs(
-    title = "2D PDP: Elevation ¡Á Temperature",
+    title = "2D PDP: Elevation Ã— Temperature",
     x = "Elevation", y = "Temperature"
   ) +
   theme_minimal(base_size = 12)
 
-#¼ÆËãALE
+#è®¡ç®—ALE
 ale_effect <- FeatureEffect$new(
   predictor_rf,
   feature = c("Elevation", "Temperature"),
   method = "ale",
-  grid.size = 20  # »ò¸ü¸ß
+  grid.size = 20  # æˆ–æ›´é«˜
 )
 p2 <-plot(ale_effect)
-# ÓÃ %+% ºÍ + À´ĞŞ¸ÄÑÕÉ«
+# ç”¨ %+% å’Œ + æ¥ä¿®æ”¹é¢œè‰²
 p2 <- p2 + scale_fill_gradient2(
   low = "blue", mid = "white", high = "red", midpoint = 0,
   name = "ALE"
 )
 
-#×éÍ¼
+#ç»„å›¾
 final_plot <- p1  + p2 + plot_layout(guides = "collect")
 print(final_plot)
 
-##############È«¾Ö´úÀíÄ£ĞÍ-20250505##############
-#1.¼ÓÔØ¿â
+
+
+##############å…¨å±€ä»£ç†æ¨¡å‹-20250505##############
+#1.åŠ è½½åº“
 library(randomForest)
 library(ggplot2)
 library(broom)
 library(dplyr)
-#2. ¹¹½¨Ëæ»úÉ­ÁÖÄ£ĞÍ£¨ºÚÏäÄ£ĞÍ£©
+#2. æ„å»ºéšæœºæ£®æ—æ¨¡å‹ï¼ˆé»‘ç®±æ¨¡å‹ï¼‰
 library(randomForest)
-# Ê¹ÓÃÒò±äÁ¿ PlantDiversity ºÍÆäËû×Ô±äÁ¿¹¹½¨Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
-set.seed(123) # ÉèÖÃÖÖ×ÓÒÔÈ·±£½á¹û¿ÉÖØ¸´
-#Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
+# ä½¿ç”¨å› å˜é‡ PlantDiversity å’Œå…¶ä»–è‡ªå˜é‡æ„å»ºéšæœºæ£®æ—å›å½’æ¨¡å‹
+set.seed(123) # è®¾ç½®ç§å­ä»¥ç¡®ä¿ç»“æœå¯é‡å¤
+#éšæœºæ£®æ—å›å½’æ¨¡å‹
 rf_model <- randomForest(PlantDiversity ~ ., data = data, 
                          ntree = 500, importance = TRUE)
-#3. »ñÈ¡Ëæ»úÉ­ÁÖÔ¤²â½á¹û£¨×÷Îª surrogate Ä£ĞÍµÄÄ¿±ê±äÁ¿£©
+#3. è·å–éšæœºæ£®æ—é¢„æµ‹ç»“æœï¼ˆä½œä¸º surrogate æ¨¡å‹çš„ç›®æ ‡å˜é‡ï¼‰
 data$y_rf <- predict(rf_model, newdata = data)
-# 4. ¹¹½¨ÏßĞÔ´úÀíÄ£ĞÍ£¨ÓÃ RF µÄÔ¤²âÖµ×öÒò±äÁ¿£©
+# 4. æ„å»ºçº¿æ€§ä»£ç†æ¨¡å‹ï¼ˆç”¨ RF çš„é¢„æµ‹å€¼åšå› å˜é‡ï¼‰
 lm_surrogate <- lm(y_rf ~ Elevation + Temperature + SoilMoisture + SoilBulk + SoilOrganicMatter, data = data)
-# 5. Ä£ĞÍÕªÒª
-summary(lm_surrogate)  # ²é¿´ÏµÊıÏÔÖøĞÔºÍ R0…5
-# 6. ¿ÉÊÓ»¯£º±äÁ¿¹À¼ÆÖµÓëÖÃĞÅÇø¼ä
+# 5. æ¨¡å‹æ‘˜è¦
+summary(lm_surrogate)  # æŸ¥çœ‹ç³»æ•°æ˜¾è‘—æ€§å’Œ RÂ²
+# 6. å¯è§†åŒ–ï¼šå˜é‡ä¼°è®¡å€¼ä¸ç½®ä¿¡åŒºé—´
 coef_df <- tidy(lm_surrogate, conf.int = TRUE) %>%
   filter(term != "(Intercept)") %>%
   mutate(
@@ -608,95 +511,97 @@ ggplot(coef_df, aes(x = reorder(term, estimate), y = estimate)) +
     title = "Global Surrogate (Linear Model)",
     x = "Variables", y = "Estimated Effect"
   ) +
-  theme_bw(base_size = 13) +  # 7¼3 Ìæ»» minimal
+  theme_bw(base_size = 13) +  # âœ… æ›¿æ¢ minimal
   theme(
     panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
-    plot.margin = margin(5.5, 30, 5.5, 5.5)  # ÓÒ±ß¼Ó´ó·ÀÖ¹ĞÇºÅ±»²Ã¼ô
+    plot.margin = margin(5.5, 30, 5.5, 5.5)  # å³è¾¹åŠ å¤§é˜²æ­¢æ˜Ÿå·è¢«è£å‰ª
   )
 
 
 
-##############¾Ö²¿´úÀíÄ£ĞÍLIME-20250505#########################
-# °²×°²¢¼ÓÔØ±ØÒªµÄ°ü
+##############å±€éƒ¨ä»£ç†æ¨¡å‹LIME-20250505#########################
+# å®‰è£…å¹¶åŠ è½½å¿…è¦çš„åŒ…
 library(lime)
 library(randomForest)
 
-# ¼ÙÉèÄãÒÑ¾­ÓĞÒ»¸öËæ»úÉ­ÁÖÄ£ĞÍ 'rf_model'£¬ÒÔ¼°Êı¾İ 'data_frame'
-# Ê¹ÓÃÒ»¸öËæ»úÉ­ÁÖÄ£ĞÍ²¢½øĞĞÑµÁ·
+# å‡è®¾ä½ å·²ç»æœ‰ä¸€ä¸ªéšæœºæ£®æ—æ¨¡å‹ 'rf_model'ï¼Œä»¥åŠæ•°æ® 'data_frame'
+# ä½¿ç”¨ä¸€ä¸ªéšæœºæ£®æ—æ¨¡å‹å¹¶è¿›è¡Œè®­ç»ƒ
 set.seed(123)
 rf_model <- randomForest(PlantDiversity ~ ., data = data, ntree = 500)
 
-# ¶¨Òåmodel_type·½·¨ - Ö¸¶¨Ä£ĞÍÀàĞÍÎª»Ø¹é
+# å®šä¹‰model_typeæ–¹æ³• - æŒ‡å®šæ¨¡å‹ç±»å‹ä¸ºå›å½’
 model_type.randomForest <- function(x, ...) {
-  return("regression")  # Èç¹ûÊÇ·ÖÀàÎÊÌâ£¬·µ»Ø "classification"
+  return("regression")  # å¦‚æœæ˜¯åˆ†ç±»é—®é¢˜ï¼Œè¿”å› "classification"
 }
 
-# ¶¨Òåpredict_model·½·¨ - ÓÃÓÚÔ¤²âÄ£ĞÍµÄÊä³ö
+# å®šä¹‰predict_modelæ–¹æ³• - ç”¨äºé¢„æµ‹æ¨¡å‹çš„è¾“å‡º
 predict_model.randomForest <- function(x, newdata, ...) {
   results <- predict(x, newdata)
   return(as.data.frame(results))
 }
 
-# ´´½¨½âÊÍÆ÷¶ÔÏó
+# åˆ›å»ºè§£é‡Šå™¨å¯¹è±¡
 explainer <- lime(data, rf_model)
 
-# Ñ¡ÔñÒ»¸öÌØ¶¨µÄÊµÀı½øĞĞ½âÊÍ
-instance_to_explain <- data[30,]  # Ñ¡ÔñÊı¾İ¿òµÄµÚÒ»ĞĞ
+# é€‰æ‹©ä¸€ä¸ªç‰¹å®šçš„å®ä¾‹è¿›è¡Œè§£é‡Š
+instance_to_explain <- data[30,]  # é€‰æ‹©æ•°æ®æ¡†çš„ç¬¬ä¸€è¡Œ
 
-# Ê¹ÓÃLIME½âÊÍ¸ÃÊı¾İµã
+# ä½¿ç”¨LIMEè§£é‡Šè¯¥æ•°æ®ç‚¹
 explanation <- explain(instance_to_explain, explainer, n_labels = 1, n_features = 6)
 library(dplyr)
 explanation_filtered <- explanation %>%
   filter(!grepl("y_rf", feature))
-# ´òÓ¡½âÊÍ½á¹û
+# æ‰“å°è§£é‡Šç»“æœ
 print(explanation)
-# Í¨¹ı¿ÉÊÓ»¯²é¿´ÌØÕ÷¹±Ï×
+# é€šè¿‡å¯è§†åŒ–æŸ¥çœ‹ç‰¹å¾è´¡çŒ®
 plot_features(explanation_filtered)
 
-###########SHAP¾Ö²¿½âÊÍ-202050505###################
-# ¼ÓÔØ°ü
+
+
+###########SHAPå±€éƒ¨è§£é‡Š-20250505###################
+# åŠ è½½åŒ…
 library(iml)
 library(randomForest)
 
-# Ê¹ÓÃÒò±äÁ¿ PlantDiversity ºÍÆäËû×Ô±äÁ¿¹¹½¨Ëæ»úÉ­ÁÖ»Ø¹éÄ£ĞÍ
+# ä½¿ç”¨å› å˜é‡ PlantDiversity å’Œå…¶ä»–è‡ªå˜é‡æ„å»ºéšæœºæ£®æ—å›å½’æ¨¡å‹
 set.seed(123)
 rf_model <- randomForest(PlantDiversity ~ ., data = data, ntree = 500)
-# ´´½¨Predictor¶ÔÏó
+# åˆ›å»ºPredictorå¯¹è±¡
 predictor <- Predictor$new(rf_model, data = data)
-# ¼ÆËãSHAPÖµ
-shapley <- Shapley$new(predictor, x.interest = data[30, , drop = FALSE])# ½âÊÍµÚ30¸öÊµÀı
-# ´òÓ¡½á¹û
+# è®¡ç®—SHAPå€¼
+shapley <- Shapley$new(predictor, x.interest = data[30, , drop = FALSE])# è§£é‡Šç¬¬30ä¸ªå®ä¾‹
+# æ‰“å°ç»“æœ
 print(shapley)
-# »æÖÆSHAPÖµ
+# ç»˜åˆ¶SHAPå€¼
 shapley$plot()
 
 
-###ggplot2»æÍ¼
-# Ã÷È·ÒÆ³ıÏìÓ¦±äÁ¿£¬Ö»ÓÃÌØÕ÷Êı¾İ
+###ggplot2ç»˜å›¾
+# æ˜ç¡®ç§»é™¤å“åº”å˜é‡ï¼Œåªç”¨ç‰¹å¾æ•°æ®
 X <- data[, setdiff(names(data), "PlantDiversity")]
-# ÕıÈ·´´½¨ predictor
+# æ­£ç¡®åˆ›å»º predictor
 predictor <- Predictor$new(rf_model, data = X, y = data$PlantDiversity)
-# Ñ¡ÔñÒ»¸ö¹Û²âµã
+# é€‰æ‹©ä¸€ä¸ªè§‚æµ‹ç‚¹
 x_interest <- X[30, , drop = FALSE]
-# ¼ÆËã SHAP Öµ
+# è®¡ç®— SHAP å€¼
 shapley <- Shapley$new(predictor, x.interest = x_interest)
 library(ggplot2)
 library(dplyr)
-# ÌáÈ¡ SHAP Êı¾İ²¢´¦Àí feature + value ±êÇ©
+# æå– SHAP æ•°æ®å¹¶å¤„ç† feature + value æ ‡ç­¾
 shap_df <- shapley$results %>%
-  filter(feature != "y_rf") %>%  # ÒÆ³ı y_rf ĞĞ
+  filter(feature != "y_rf") %>%  # ç§»é™¤ y_rf è¡Œ
   mutate(
-    value_num = as.numeric(sub(".*=", "", feature.value)),  # ÌáÈ¡µÈºÅºóÃæµÄÖµ²¢×ªÎªÊıÖµ
-    feature_value = paste0(feature, " = ", round(value_num, 2))  # Æ´½Ó³ÉÌØÕ÷±êÇ©
+    value_num = as.numeric(sub(".*=", "", feature.value)),  # æå–ç­‰å·åé¢çš„å€¼å¹¶è½¬ä¸ºæ•°å€¼
+    feature_value = paste0(feature, " = ", round(value_num, 2))  # æ‹¼æ¥æˆç‰¹å¾æ ‡ç­¾
   ) %>%
   arrange(phi) %>%
-  mutate(feature_value = factor(feature_value, levels = feature_value))  # ¿ØÖÆ y ÖáË³Ğò
+  mutate(feature_value = factor(feature_value, levels = feature_value))  # æ§åˆ¶ y è½´é¡ºåº
 
-# »ñÈ¡Ô¤²âÖµºÍ baseline£¨Æ½¾ùÔ¤²â£©
+# è·å–é¢„æµ‹å€¼å’Œ baselineï¼ˆå¹³å‡é¢„æµ‹ï¼‰
 prediction <- as.numeric(shapley$y.hat)
 baseline <- as.numeric(shapley$y.hat.mean)
 
-# »æÍ¼
+# ç»˜å›¾
 ggplot(shap_df, aes(x = phi, y = feature_value, fill = phi > 0)) +
   geom_col() +
   scale_fill_manual(values = c("TRUE" = "#e74c3c", "FALSE" = "#3498db")) +
