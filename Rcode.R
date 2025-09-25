@@ -40,6 +40,7 @@ corrplot(cor_matrix,
          tl.font = 3,              # 斜体标签
          number.cex = 0.9,
          mar = c(0, 0, 2, 0))
+  
 ###############线性回归模型-20250504############################
 # 安装和加载必要包
 library(lm.beta)
@@ -178,7 +179,6 @@ rpart.plot(tree_model, type = 2, extra = 101,
 
 
 
-
 #############随机森林模型-202050504###########
 library(randomForest)
 # 使用因变量 PlantDiversity 和其他自变量构建随机森林回归模型
@@ -202,9 +202,7 @@ rf_model <- randomForest(PlantDiversity ~ ., data = data, importance = TRUE)
 # 查看特征的重要性
 importance(rf_model)
 
-# ----------------------------
 # 特征重要性排序并打印
-# ----------------------------
 # Permutation Importance（置换重要性）
 perm_importance <- importance(rf_model, type = 2)
 perm_ordered <- perm_importance[order(perm_importance[, 1], decreasing = TRUE), ]
@@ -217,14 +215,11 @@ gini_ordered <- gini_importance[order(gini_importance[, 1], decreasing = TRUE), 
 print("Gini Importance:")
 print(gini_ordered)
 
-# ----------------------------
 # 组图显示（1行2列）
-# ----------------------------
 par(mfrow = c(1, 2))  # 设置画布为 1 行 2 列
 varImpPlot(rf_model, type = 1, main = "Permutation Importance")          # 左图
 varImpPlot(rf_model, type = 2, main = "Gini Importance")   # 右图
 par(mfrow = c(1, 1))  # 恢复为单图模式
-
 
 
 
@@ -360,8 +355,6 @@ print(final_ale_plot)
 
 
 
-
-
 ############特征交互-20250505############
 set.seed(123) # 设置种子以确保结果可重复
 #随机森林回归模型
@@ -423,6 +416,7 @@ final_plot <- plot1 + plot2 +
 print(final_plot)
 
 
+  
 ######2D-PDP和2D-ALE###########
 #加载包
 library(randomForest)
@@ -470,6 +464,7 @@ final_plot <- p1  + p2 + plot_layout(guides = "collect")
 print(final_plot)
 
 
+  
 
 ##############全局代理模型-20250505##############
 #1.加载库
@@ -575,7 +570,6 @@ print(shapley)
 # 绘制SHAP值
 shapley$plot()
 
-
 ###ggplot2绘图
 # 明确移除响应变量，只用特征数据
 X <- data[, setdiff(names(data), "PlantDiversity")]
@@ -614,6 +608,7 @@ ggplot(shap_df, aes(x = phi, y = feature_value, fill = phi > 0)) +
   ) +
   theme_minimal(base_size = 13) +
   theme(legend.position = "none")
+
 
 
 
